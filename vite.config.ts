@@ -2,25 +2,25 @@ import { defineConfig, Plugin } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 
+// ✅ Yeh pura block ke baad define hoga expressPlugin()
 export default defineConfig(({ command }) => {
   const plugins = [react()];
 
-  // Only run Express in dev mode
+  // ✅ Only use expressPlugin in dev mode (not in Netlify build)
   if (command === 'serve') {
     plugins.push(expressPlugin());
   }
 
   return {
-    root: 'client', // 👈 index.html is here
+    root: '.', // index.html is in root
     plugins,
     build: {
-      outDir: '../dist/spa', // 👈 build will be here
-      emptyOutDir: true,
+      outDir: 'dist/spa',
     },
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './client'),     // 👉 @ -> client/
-        '@shared': path.resolve(__dirname, './shared') // 👉 Optional shared folder
+        '@': path.resolve(__dirname, './client'),
+        '@shared': path.resolve(__dirname, './shared'),
       },
     },
     server: {
@@ -30,9 +30,9 @@ export default defineConfig(({ command }) => {
   };
 });
 
-// Express plugin for Vite dev mode
+// ✅ Ab yaha define karo function expressPlugin
 function expressPlugin(): Plugin {
-  const { createServer } = require('./server'); // 👈 make sure this path exists
+  const { createServer } = require('./server'); // make sure this path is correct
   return {
     name: 'express-plugin',
     configureServer(server) {
