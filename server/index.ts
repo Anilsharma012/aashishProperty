@@ -304,7 +304,7 @@ export function createServer() {
   // Middleware
   app.use(
     cors({
-      origin: true, // Allow all origins in development
+      origin: true, 
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       allowedHeaders: [
@@ -315,11 +315,12 @@ export function createServer() {
       ],
     }),
   );
+  
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
   // Initialize MongoDB connection
-  connectToDatabase()
+      connectToDatabase()
     .then(() => {
       console.log("✅ MongoDB Atlas connected successfully");
     })
