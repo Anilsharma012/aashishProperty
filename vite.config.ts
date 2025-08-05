@@ -7,7 +7,7 @@ import { createServer } from "./server";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 8081,
+    port: 8083,
   },
   build: {
     outDir: path.resolve(__dirname, "../spa"), // ✅ Output to ../spa folder
