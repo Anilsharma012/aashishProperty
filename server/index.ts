@@ -965,20 +965,14 @@ const server = http.createServer(app);
 
 
 
-// For production
-// For production
-export function createServerHttp(app: express.Application) {
-  return createServer(app);
-}
 
-// 🔥 Standalone production block (only runs if executed directly)
+
+
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const { app, server } = createServer(); // ✅ No double createServer call
+  const { app, server } = createServer();
   const port = process.env.PORT || 3000;
 
   server.listen(port, () => {
-    console.log(`🚀 Server running on port ${port}`);
-    console.log(`📱 WebSocket available at ws://localhost:${port}/ws/chat`);
+    console.log(`Server listening on port ${port}`);
   });
 }
-
