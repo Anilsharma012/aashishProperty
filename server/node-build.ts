@@ -7,7 +7,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // ✅ Get port from env or default to 8080
-const port = parseInt(process.env.PORT || "8080", 10);
+const port = process.env.PORT || 3000;
+
 
 // ✅ Get Express app and HTTP server (with WebSocket if used)
 const { app, server } = createServer();

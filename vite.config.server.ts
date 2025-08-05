@@ -1,13 +1,16 @@
 import { defineConfig } from "vite";
 import path from "path";
+import dotenv from "dotenv";
 
-// Server build configuration
+// ✅ Load environment variables
+dotenv.config();
+
 export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "server/node-build.ts"),
       name: "server",
-      fileName: "production",
+      fileName: "node-build",
       formats: ["es"],
     },
     outDir: "dist/server",
@@ -29,16 +32,22 @@ export default defineConfig({
         "buffer",
         "querystring",
         "child_process",
-        // External dependencies that should not be bundled
+        // External dependencies
         "express",
         "cors",
+        "socket.io",
+        "ws",
+        "mongodb",
+        "multer",
+        "jsonwebtoken",
+        "zod",
       ],
       output: {
         format: "es",
         entryFileNames: "[name].mjs",
       },
     },
-    minify: false, // Keep readable for debugging
+    minify: false,
     sourcemap: true,
   },
   resolve: {
@@ -49,5 +58,6 @@ export default defineConfig({
   },
   define: {
     "process.env.NODE_ENV": '"production"',
+    "process.env.PORT": JSON.stringify(process.env.PORT || "8080"), // ✅ Inject PORT env
   },
 });
