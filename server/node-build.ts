@@ -7,9 +7,9 @@ import express from "express";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Create the main server (Express + WebSocket included)
-const server = createServer(); // this should return `http.createServer(app)` from index.ts
-const app = server._events.request as express.Application;
+// ✅ Destructure both app and server from createServer()
+const { app, server } = createServer();
+
 const port = process.env.PORT || 3000;
 
 // Serve frontend static files

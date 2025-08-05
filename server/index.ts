@@ -941,21 +941,27 @@ export function createServer() {
     });
   });
 
-  return app;
+const httpServer = createServerHttp(app);
+  new ChatWebSocketServer(httpServer);
+
+  return { app, server: httpServer };
+
 }
 
 // For production
+// For production
+export function createServerHttp(app: express.Application) {
+  return createServer(app);
+}
+
+// 🔥 Standalone production block (only runs if executed directly)
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const app = createServer();
-  const httpServer = createServer(app);
-
-  // Initialize WebSocket server
-  const chatWs = new ChatWebSocketServer(httpServer);
-  console.log('🔌 WebSocket server initialized');
-
+  const { app, server } = createServer(); // ✅ No double createServer call
   const port = process.env.PORT || 3000;
-  httpServer.listen(port, () => {
+
+  server.listen(port, () => {
     console.log(`🚀 Server running on port ${port}`);
     console.log(`📱 WebSocket available at ws://localhost:${port}/ws/chat`);
   });
 }
+
