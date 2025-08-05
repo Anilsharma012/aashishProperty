@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
     port: 8083,
   },
   build: {
-    outDir: path.resolve(__dirname, "../spa"), // ✅ Output to ../spa folder
+      outDir: path.resolve(__dirname, "../dist/spa"), // ✅ Output to ../spa folder
     emptyOutDir: true, // ✅ Clean folder before build
   },
   plugins: [react(), expressPlugin()],
