@@ -956,7 +956,7 @@ const server = http.createServer(app);
   });
 
   // ✅ MongoDB connection
-  connectToDatabase().catch(console.error);
+
 
 
    return { app, server };
