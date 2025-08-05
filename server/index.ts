@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { createServer } from "http";
 import http from 'http';
+import { Server as SocketServer } from "socket.io";
 import { connectToDatabase, getDatabase } from "./db/mongodb";
 import { authenticateToken, requireAdmin } from "./middleware/auth";
 import { ChatWebSocketServer } from "./websocket";
@@ -942,19 +943,20 @@ export function createServer() {
       environment: process.env.NODE_ENV || "development"
     });
   });
-const httpServer = http.createServer(app);
-  new ChatWebSocketServer(httpServer);
+const server = http.createServer(app);
+  new ChatWebSocketServer(server);
 
 
-   const io = new Server(server, {
-    cors: {
-      origin: "*",
-    },
+    const io = new SocketServer(server, {
+    cors: { origin: "*" },
   });
 
-  socketHandler(io);
+  io.on("connection", (socket) => {
+    console.log("⚡ New WebSocket connected:", socket.id);
+  });
 
-  return { app, server: httpServer };
+  // ✅ MongoDB connection
+  connectToDatabase().catch(console.error);
 
 }
 
