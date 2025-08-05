@@ -58,6 +58,6 @@ export default defineConfig({
   },
   define: {
     "process.env.NODE_ENV": '"production"',
-    "process.env.PORT": JSON.stringify(process.env.PORT || "8080"), // ✅ Inject PORT env
+    "process.env.PORT": JSON.stringify(process.env.PORT || "8081"), // ✅ Inject PORT env
   },
 });
