@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { createServer } from "http";
+import http from 'http';
 import { connectToDatabase, getDatabase } from "./db/mongodb";
 import { authenticateToken, requireAdmin } from "./middleware/auth";
 import { ChatWebSocketServer } from "./websocket";
@@ -941,9 +942,17 @@ export function createServer() {
       environment: process.env.NODE_ENV || "development"
     });
   });
-
-const httpServer = createServerHttp(app);
+const httpServer = http.createServer(app);
   new ChatWebSocketServer(httpServer);
+
+
+   const io = new Server(server, {
+    cors: {
+      origin: "*",
+    },
+  });
+
+  socketHandler(io);
 
   return { app, server: httpServer };
 
