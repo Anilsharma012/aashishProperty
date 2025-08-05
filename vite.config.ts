@@ -1,22 +1,20 @@
-// vite.config.ts
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
-import path from 'path';
+import { defineConfig, Plugin } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import path from "path";
+import { createServer } from "./server";
 
-export default defineConfig({
-  root: '.', // root me hi index.html hai
-  plugins: [react()],
+// https://vitejs.dev/config/
+export default defineConfig(({ mode }) => ({
+
   build: {
-    outDir: 'dist/spa', // as per your Netlify/pkg config
+    outDir: "dist/spa",
   },
+  plugins: [react(), expressPlugin()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
-      '@shared': path.resolve(__dirname, 'shared'),
+      "@": path.resolve(__dirname, "./client"),
+      "@shared": path.resolve(__dirname, "./shared"),
     },
   },
-  server: {
-    port: 5173,
-    open: true,
-  },
-});
+}));
+
