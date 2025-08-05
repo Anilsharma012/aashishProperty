@@ -1,13 +1,13 @@
 import { MongoClient, Db } from "mongodb";
 
-// URL encode the password to handle special characters
 const username = "Aashishpropeorty";
-const password = "ANILSHARMA"; // Using the exact password provided
+const password = "ANILSHARMA";
 const cluster = "property.zn2cowc.mongodb.net";
 
 const MONGODB_URI =
   process.env.MONGODB_URI ||
   `mongodb+srv://${encodeURIComponent(username)}:${encodeURIComponent(password)}@${cluster}/?retryWrites=true&w=majority&appName=Property`;
+
 const DB_NAME = process.env.DB_NAME || "aashish_property";
 
 let client: MongoClient;
@@ -27,16 +27,14 @@ export async function connectToDatabase() {
     console.log("📊 Target Database:", DB_NAME);
 
     client = new MongoClient(MONGODB_URI, {
-      serverSelectionTimeoutMS: 15000, // 15 seconds
-      connectTimeoutMS: 20000, // 20 seconds
+      serverSelectionTimeoutMS: 15000,
+      connectTimeoutMS: 20000,
       maxPoolSize: 10,
       retryWrites: true,
       retryReads: true,
       maxIdleTimeMS: 30000,
       heartbeatFrequencyMS: 10000,
-      // Add auth source
       authSource: "admin",
-      // SSL/TLS options
       tls: true,
       tlsAllowInvalidCertificates: false,
       tlsAllowInvalidHostnames: false,
@@ -46,17 +44,14 @@ export async function connectToDatabase() {
     await client.connect();
     console.log("✅ Client connected to MongoDB Atlas");
 
-    // Test the connection with admin command
     console.log("🏓 Testing connection with ping...");
     const pingResult = await client.db("admin").command({ ping: 1 });
     console.log("🏓 Ping result:", pingResult);
 
-    // Get the database
     db = client.db(DB_NAME);
     console.log("✅ Connected to MongoDB Atlas successfully!");
     console.log("📊 Database:", DB_NAME);
 
-    // Test database access
     const stats = await db.stats();
     console.log("📈 Database stats:", {
       collections: stats.collections,
@@ -74,28 +69,7 @@ export async function connectToDatabase() {
       codeName: error.codeName,
     });
 
-    // Specific error handling
-    if (error.message.includes("authentication") || error.code === 18) {
-      console.error("🔐 Authentication failed - check username/password");
-      console.error("💡 Suggestion: Verify credentials in MongoDB Atlas");
-    } else if (error.message.includes("timeout") || error.code === 89) {
-      console.error("⏱️ Connection timeout - check network connectivity");
-      console.error("💡 Suggestion: Check IP whitelist in MongoDB Atlas");
-    } else if (
-      error.message.includes("ENOTFOUND") ||
-      error.message.includes("getaddrinfo")
-    ) {
-      console.error("🌐 DNS resolution failed - check cluster URL");
-      console.error("💡 Suggestion: Verify cluster URL is correct");
-    } else if (
-      error.message.includes("IP") ||
-      error.message.includes("whitelist")
-    ) {
-      console.error("🚫 IP not whitelisted - check network access");
-      console.error("💡 Suggestion: Add current IP to MongoDB Atlas whitelist");
-    }
-
-    // Clean up client if connection failed
+    // Diagnostic logging (but no recursion!)
     if (client) {
       try {
         await client.close();
@@ -104,7 +78,7 @@ export async function connectToDatabase() {
       }
     }
 
-    throw error;
+    throw error; // ✅ DO NOT RETRY HERE! Just throw it.
   }
 }
 
@@ -118,6 +92,6 @@ export function getDatabase() {
 export async function closeDatabaseConnection() {
   if (client) {
     await client.close();
-    console.log("Disconnected from MongoDB");
+    console.log("🔌 Disconnected from MongoDB");
   }
 }
