@@ -968,11 +968,12 @@ const server = http.createServer(app);
 
 
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const { app, server } = createServer();
-  const port = process.env.PORT || 3000;
+// if (import.meta.url === `file://${process.argv[1]}`) {
+  
+//   const { app, server } = createServer();
+//   const port = process.env.PORT || 3000;
 
-  server.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-  });
-}
+//   server.listen(port, () => {
+//     console.log(`Server listening on port ${port}`);
+//   });
+// }
